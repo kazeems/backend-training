@@ -1,6 +1,7 @@
 <?php
 
-use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ComputationController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,9 +16,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('register', [AuthController::class, 'register']);
+Route::post('login', [AuthController::class, 'login']);
+
+Route::group(['middleware' => 'auth:sanctum'], function() {
+    Route::get('students', [ComputationController::class, 'getStudents']);
+    Route::post('add-result', [ComputationController::class, 'addGrade']);
+    Route::get('my-results', [ComputationController::class, 'results']);
+
 });
-
-
-Route::post('/register-api', [RegisterController::class, 'registerApi']);
